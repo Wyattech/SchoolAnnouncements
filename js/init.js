@@ -151,6 +151,12 @@
      * Initializes the application
      */
     function init() {
+        // Validate configuration before proceeding
+        if (!window.ConfigValidator.validateAndDisplay()) {
+            console.error('Application cannot start due to configuration errors');
+            return; // Stop initialization if config is invalid
+        }
+
         initializeSchoolName();
         initializeKeyboardControls();
         scheduleDaily3AMRefresh();
