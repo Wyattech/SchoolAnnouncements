@@ -3,83 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="School morning announcements display system with weather, time, and event information">
     <title>School Announcements</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
-<body>
+<body role="application" aria-label="School Announcements Display">
+    <!-- Skip to main content link for keyboard navigation -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     <!-- Main Content Area (75% width, 80% height) -->
-    <div class="main-content">
-        <div class="content-display" id="contentDisplay">
+    <main class="main-content" id="main-content" role="main" aria-label="Announcements and Livestream">
+        <section class="content-display" id="contentDisplay" aria-label="Main display area">
             <!-- Slideshow or Livestream will be displayed here -->
-            <div class="slideshow-container" id="slideshowContainer">
-                <div class="slide active">
+            <div class="slideshow-container" id="slideshowContainer" role="region" aria-label="Announcement slideshow" aria-live="polite">
+                <article class="slide active" role="article" aria-label="Welcome message">
                     <h1 id="welcomeMessage">Welcome</h1>
                     <p>Morning Announcements</p>
-                </div>
-                <div class="slide">
+                </article>
+                <article class="slide" role="article" aria-label="Today's events">
                     <h2>Today's Events</h2>
-                    <ul>
+                    <ul aria-label="List of today's events">
                         <li>Student Council Meeting - 3:00 PM</li>
                         <li>Basketball Practice - 4:00 PM</li>
                         <li>Drama Club Rehearsal - 3:30 PM</li>
                     </ul>
-                </div>
-                <div class="slide">
+                </article>
+                <article class="slide" role="article" aria-label="Important reminders">
                     <h2>Important Reminders</h2>
-                    <ul>
+                    <ul aria-label="List of important reminders">
                         <li>Report cards available next week</li>
                         <li>Picture day retakes on Friday</li>
                         <li>Winter break begins December 23rd</li>
                     </ul>
-                </div>
+                </article>
             </div>
             <!-- Livestream iframe (hidden by default) -->
-            <iframe id="livestreamFrame" class="livestream-frame" style="display: none;" allowfullscreen></iframe>
-        </div>
-    </div>
+            <iframe id="livestreamFrame" class="livestream-frame" style="display: none;" allowfullscreen
+                    title="School livestream video" aria-label="Live broadcast from school"></iframe>
+        </section>
+    </main>
 
     <!-- Weather Panel (25% width, 100% height) -->
-    <aside class="weather-panel">
-        <div class="weather-header">
+    <aside class="weather-panel" role="complementary" aria-label="Weather information">
+        <header class="weather-header">
             <h2>Weather</h2>
-        </div>
+        </header>
 
         <!-- Current Weather -->
-        <div class="current-weather" id="currentWeather">
-            <div class="weather-icon">
-                <img id="currentIcon" src="" alt="Weather icon">
+        <section class="current-weather" id="currentWeather" role="region" aria-label="Current weather conditions">
+            <div class="weather-icon" aria-hidden="true">
+                <img id="currentIcon" src="" alt="Current weather condition icon">
             </div>
-            <div class="temperature" id="currentTemp">--°F</div>
-            <div class="weather-description" id="currentDesc">Loading...</div>
-            <div class="weather-details">
+            <div class="temperature" id="currentTemp" aria-label="Current temperature">--°F</div>
+            <div class="weather-description" id="currentDesc" aria-live="polite">Loading...</div>
+            <div class="weather-details" aria-label="Additional weather details">
                 <div class="detail">
                     <span class="label">Feels Like:</span>
-                    <span id="feelsLike">--°F</span>
+                    <span id="feelsLike" aria-label="Feels like temperature">--°F</span>
                 </div>
                 <div class="detail">
                     <span class="label">Humidity:</span>
-                    <span id="humidity">--%</span>
+                    <span id="humidity" aria-label="Humidity percentage">--%</span>
                 </div>
             </div>
-        </div>
+        </section>
 
         <!-- Week Forecast -->
-        <div class="week-forecast" id="weekForecast">
+        <section class="week-forecast" id="weekForecast" role="region" aria-label="5-day weather forecast">
             <!-- Forecast days will be populated by JavaScript -->
-        </div>
+        </section>
     </aside>
 
     <!-- Bottom Panel (75% width, 20% height) -->
-    <footer class="bottom-panel">
-        <div class="school-name">
-            <h1 id="schoolName">School Name</h1>
+    <footer class="bottom-panel" role="contentinfo" aria-label="School information and current time">
+        <div class="school-name" role="banner">
+            <h1 id="schoolName" aria-label="School name">School Name</h1>
         </div>
-        <div class="datetime-display">
-            <div class="time" id="timeDisplay">00:00:00</div>
-            <div class="date" id="dateDisplay">Loading...</div>
+        <div class="datetime-display" role="timer" aria-label="Current date and time" aria-live="off">
+            <time class="time" id="timeDisplay" datetime="" aria-label="Current time">00:00:00</time>
+            <time class="date" id="dateDisplay" datetime="" aria-label="Current date">Loading...</time>
         </div>
     </footer>
 

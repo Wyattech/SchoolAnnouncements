@@ -4,6 +4,54 @@
     box-sizing: border-box;
 }
 
+/* ========================================
+   Accessibility Styles
+   ======================================== */
+
+/* Skip to main content link - visible only on keyboard focus */
+.skip-link {
+    position: absolute;
+    top: -100px;
+    left: 0;
+    background: var(--color-accent-gold, #ffd700);
+    color: #000;
+    padding: 1rem 2rem;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.6rem;
+    z-index: 99999;
+    border-radius: 0 0 8px 0;
+}
+
+.skip-link:focus {
+    top: 0;
+    outline: 3px solid #000;
+    outline-offset: 2px;
+}
+
+/* Enhanced focus indicators for keyboard navigation */
+*:focus {
+    outline: 3px solid var(--color-accent-gold, #ffd700);
+    outline-offset: 2px;
+}
+
+*:focus:not(:focus-visible) {
+    outline: none;
+}
+
+*:focus-visible {
+    outline: 3px solid var(--color-accent-gold, #ffd700);
+    outline-offset: 2px;
+}
+
+/* Ensure interactive elements have visible focus */
+a:focus,
+button:focus,
+[role="button"]:focus {
+    outline: 3px solid var(--color-accent-gold, #ffd700);
+    outline-offset: 2px;
+}
+
 /**
  * ============================================================================
  * CSS Custom Properties (CSS Variables) - Theme Customization Guide
@@ -662,5 +710,55 @@ body {
     .error-notification-close {
         font-size: var(--font-size-xs);
         padding: 0.7rem var(--spacing-md);
+    }
+}
+
+/* ========================================
+   Reduced Motion Support
+   ======================================== */
+
+/**
+ * Respect user's preference for reduced motion
+ * Disables animations for users with motion sensitivity
+ */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    /* Disable slide animations */
+    @keyframes fadeIn {
+        from { opacity: 1; transform: none; }
+        to { opacity: 1; transform: none; }
+    }
+
+    /* Disable pulse animation */
+    @keyframes pulse {
+        0%, 100% {
+            box-shadow: 0 8px 32px rgba(231, 76, 60, 0.5);
+        }
+        50% {
+            box-shadow: 0 8px 32px rgba(231, 76, 60, 0.5);
+        }
+    }
+
+    /* Disable transitions on interactive elements */
+    .forecast-day,
+    .error-notification,
+    .error-notification-retry,
+    .error-notification-close {
+        transition: none !important;
+    }
+
+    /* Remove transform effects */
+    .forecast-day:hover,
+    .error-notification-retry:hover,
+    .error-notification-close:hover {
+        transform: none !important;
     }
 }
