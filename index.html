@@ -6,8 +6,11 @@
     <meta name="description" content="School morning announcements display system with weather, time, and event information">
     <title>School Announcements</title>
     <link rel="stylesheet" href="styles.css">
+    <!-- Resource hints for better performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://api.openweathermap.org">
+    <link rel="dns-prefetch" href="https://openweathermap.org">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body role="application" aria-label="School Announcements Display">
@@ -95,6 +98,7 @@
     <script src="js/constants.js"></script>
     <script src="js/error-handler.js"></script>
     <script src="js/config-validator.js"></script>
+    <script src="js/cache.js"></script>
 
     <!-- Application Modules -->
     <script src="js/datetime.js"></script>

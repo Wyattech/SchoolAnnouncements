@@ -71,8 +71,25 @@
             return;
         }
 
+        // Check cache first (5-minute TTL for weather data)
+        const cacheKey = `weather_${locationParam}`;
+        const cachedData = window.Cache?.get(cacheKey);
+
+        if (cachedData) {
+            console.log('Using cached weather data');
+            if (cachedData.current) {
+                displayCurrentWeather(cachedData.current);
+            }
+            if (cachedData.forecast) {
+                displayWeatherForecast(cachedData.forecast);
+            }
+            return;
+        }
+
         try {
-            await window.ErrorHandler.handleNetworkError(
+            const weatherData = {};
+
+            const currentWeather = await window.ErrorHandler.handleNetworkError(
                 () => fetchCurrentWeather(locationParam, WEATHER_API_KEY),
                 {
                     maxRetries: 2,
@@ -81,7 +98,11 @@
                 }
             );
 
-            await window.ErrorHandler.handleNetworkError(
+            if (currentWeather) {
+                weatherData.current = currentWeather;
+            }
+
+            const forecast = await window.ErrorHandler.handleNetworkError(
                 () => fetchWeatherForecast(locationParam, WEATHER_API_KEY),
                 {
                     maxRetries: 2,
@@ -89,6 +110,16 @@
                     userMessage: 'Failed to fetch weather forecast'
                 }
             );
+
+            if (forecast) {
+                weatherData.forecast = forecast;
+            }
+
+            // Cache the weather data (5 minutes TTL)
+            if (Object.keys(weatherData).length > 0) {
+                window.Cache?.set(cacheKey, weatherData, 300000); // 5 minutes
+                console.log('Weather data cached for 5 minutes');
+            }
         } catch (error) {
             // Error already handled by ErrorHandler
             const currentDescElement = document.getElementById(CONSTANTS.ELEMENT_IDS.CURRENT_DESC);
@@ -161,6 +192,7 @@
      * Fetches current weather conditions
      * @param {string} locationParam - Location parameter for API
      * @param {string} apiKey - OpenWeatherMap API key
+     * @returns {Promise<Object>} Weather data
      */
     async function fetchCurrentWeather(locationParam, apiKey) {
         const url = `${CONSTANTS.WEATHER_API_CURRENT_URL}?${locationParam}&appid=${apiKey}&units=${CONSTANTS.WEATHER_API_UNITS}`;
@@ -170,7 +202,8 @@
         const data = await response.json();
 
         if (data.cod === 200) {
-            updateCurrentWeather(data);
+            displayCurrentWeather(data);
+            return data;
         } else {
             const errorMsg = data.message || 'Failed to fetch current weather';
             displayError(CONSTANTS.ELEMENT_IDS.CURRENT_DESC, `Error: ${errorMsg}`);
@@ -186,6 +219,7 @@
      * Fetches weather forecast
      * @param {string} locationParam - Location parameter for API
      * @param {string} apiKey - OpenWeatherMap API key
+     * @returns {Promise<Object>} Forecast data
      */
     async function fetchWeatherForecast(locationParam, apiKey) {
         const url = `${CONSTANTS.WEATHER_API_FORECAST_URL}?${locationParam}&appid=${apiKey}&units=${CONSTANTS.WEATHER_API_UNITS}`;
@@ -193,10 +227,27 @@
         const data = await response.json();
 
         if (data.cod === "200") {
-            updateWeekForecast(data);
+            displayWeatherForecast(data);
+            return data;
         } else {
             throw new Error(data.message || 'Failed to fetch forecast');
         }
+    }
+
+    /**
+     * Displays current weather data (from cache or fresh API call)
+     * @param {Object} data - Weather data
+     */
+    function displayCurrentWeather(data) {
+        updateCurrentWeather(data);
+    }
+
+    /**
+     * Displays forecast data (from cache or fresh API call)
+     * @param {Object} data - Forecast data
+     */
+    function displayWeatherForecast(data) {
+        updateWeekForecast(data);
     }
 
     /**
