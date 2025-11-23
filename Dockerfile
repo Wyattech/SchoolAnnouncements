@@ -10,8 +10,10 @@ COPY nginx.conf /etc/nginx/conf.d/
 # Copy application files
 COPY index.html /usr/share/nginx/html/
 COPY styles.css /usr/share/nginx/html/
-COPY script.js /usr/share/nginx/html/
 COPY config.js /usr/share/nginx/html/
+
+# Copy JavaScript modules
+COPY js/ /usr/share/nginx/html/js/
 
 # Create a health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
